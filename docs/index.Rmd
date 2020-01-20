@@ -1,0 +1,390 @@
+---
+title: "Week 3: R Style, Programming, and Debugging"
+output:
+  revealjs::revealjs_presentation:
+    theme: white
+    center: true
+    transition: none
+    incremental: true
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+library(tidyverse)
+knitr::opts_chunk$set(echo = TRUE)
+```
+# R Programming Style
+
+## Google's R Style Guide
+While there is not universal agreement on programming style, we will adhere to the concepts in the Google R Style Guide: [https://google.github.io/styleguide/Rguide.xml](https://google.github.io/styleguide/Rguide.xml)
+
+## Notation and Naming
+
+- **File Names:** File names should end in .R and be meaningful.
+    - Good: predict_ad_revenue.R
+    - Bad: foo.R
+- **Identifiers:** Don't use underscores or hypens in identifiers.
+    - The preferred form for variable names is all lower case letters with words separated with dots (`variable.name`), but `VariableName` is also accepted.
+    - Function names begin with capital letters and include no dots (`FunctionName`)
+
+## Syntax
+- **Spacing:** 
+    - Place spaces around all operators (`==, +, ...`)
+    - Do not place a space before a comma, but always place one after a comma.
+    - Place a space before left parenthesis, except in a function call.
+- **Assignment:**
+    - Use `<-` not `=` for assignment.
+
+## Operators in R
+- Most mathematical operators are self explanatory, but here are a few more important operators.
+    - `==` will test for equality. For example to determine if pi equals three, this can be evaluated with `pi == 3` in R and will return `r pi == 3 `. Note this operator returns a logical value.
+    - `&` is the AND operator, so `TRUE & FALSE` will return `r TRUE & FALSE`.
+    - `|` is the OR operator, so `TRUE | FALSE` will return `r TRUE | FALSE`.
+    - `!` is the NOT operator, so `! TRUE` will return `r  ! TRUE`.
+    - `^` permits power terms, so `4 ^ 2` returns `r 4^2` and `4 ^ .5` returns `r 4 ^ .5`.
+
+
+## Exercise: Order of operations
+Note that order of operations is important in writing R code.
+```{r opt,eval=F}
+4 - 2 ^ 2
+(4 - 2) ^ 2
+5 * 2 - 3 ^ 2
+pi == 3
+! TRUE & pi == 3
+! (TRUE | FALSE) 
+```
+
+Evaluate all  expressions. Note `!` is R's not operator.
+
+## Solution: Order of operations
+The results of the R code are:
+```{r opt2, }
+4 - 2 ^ 2
+(4 - 2) ^ 2
+5 * 2 - 3 ^ 2
+```
+
+## Solution: Order of operations
+The results of the R code are:
+```{r }
+pi == 3
+! TRUE & pi == 3
+! (TRUE | FALSE) 
+```
+
+
+## Organization: Layout of .R
+- **General Layout:**
+The general layout of an R script should follow as:
+  1. Author Comment
+  2. File description comment, including purpose of program, inputs, and outputs
+  3. `source()` and `library()` statements
+  4. Function definitions
+  5. Executed statements
+
+## Organization: Layout of .Rmd
+- **General Layout:**
+We will generally work with R Markdown files (.Rmd) in this class.
+
+- Code comments can be included in R chunks
+
+- Print out all code in documents
+
+- For reproducibility R output can be integrated into text, using "r mean(x)" (using back ticks in place of quotes). _DO NOT_ hard code results in written text.
+
+- Look at output to verify results look how you intended.
+  
+## Organization: Commenting
+>- Comment your code. Entire commented lines should begin with `#` and then one space.
+>- Short comments can be placed after code preceded by two spaces, `#` and then one space.
+```{r noeval, eval=FALSE}
+# create plot of housing price by zipcode
+plot(Seattle$Price ~ Seattle$Zip,
+  rgb(.5,0,0,.7),  # set transparency for points
+  xlab='zipode')
+```
+
+## Parting Words
+>- Use common sense and *be consistent*.
+>- If you are editing code, take a few minutes to look at the code around you and mimic the style.
+>- Enough about writing code; the code itself is much more interesting. Have fun!
+
+# Tables for R Markdown
+
+## Kable function
+Note that output from R can often be hard to read. Luckily there are several options for creating nicely formatted tables. One, which we will use, is the kable function.
+
+## Kable function
+```{r kable, mysize=TRUE, size='\\small'}
+library(knitr)
+kable(aggregate(Loblolly$height,
+      by=list(Loblolly$age),mean), digits=3,
+      caption= 'Average height of loblolly pine by age',
+      col.names = c('Tree Age','Height (ft)'))
+```
+
+# Built in R Functions
+
+## R Functions
+>- To get more details in R, type `?FunctionName`. This will open up a help window that displays essential characteristics of the function. For example, with the `mean` function the following information is shown:
+
+**Description**: function for the (trimmed) arithmetic mean.
+
+**Usage**: mean(x, trim = 0, na.rm = FALSE, ...)
+
+**x**: An R object.
+
+**trim:** the fraction (0 to 0.5) of observations to be trimmed from each end of x before the mean is computed. 
+
+**na.rm:** a logical value indicating whether NA values should be stripped before the computation proceeds.
+
+## Downloading R Packages
+>- R has a set of built in functions, which we have used thus far.
+>- R also has a vast repository of "packages" that contain additional, specialized functions. One example is a graphics packaged called `ggplot2` which we will see later in this class.
+
+Using these external packages requires two steps:
+
+1. Download the package `install.packages('ggplot2')`. This only needs to be done once.
+2. Load the package `library(ggplot2)`. This needs to be done when opening R.
+    
+
+
+# Writing R Functions
+
+## Organization: Functions
+Functions should contain a comments section immediately below the function definition line. These comments should consist of 
+
+>1. a one-sentence description; 
+2. a list of the functions arguments, denoted by `Args:`, with a description of each and 
+ 3. a description of the return value, denoted by `Returns:`. 
+ 
+ The comments should be descriptive enough that the function can be used without reading the function code.
+ 
+## Overview Functions in R
+Functions are a way to save elements of code to be used repeatedly.
+
+```{r}
+RollDice <- function(num.rolls){
+  # 
+  # ARGS: 
+  # RETURNS: 
+  return(sample(6, num.rolls, replace = T))
+}
+RollDice(2)
+```
+
+## Exercise: Function Descriptions 
+Document this function with 
+
+1. a description,
+2. summary of input(s)
+3. summary of outputs
+
+```{r}
+RollDice <- function(num.rolls){
+  # 
+  # ARGS:
+  # RETURNS: 
+  return(sample(6, num.rolls, replace = T))
+}
+```
+
+## Solution: Function Descriptions 
+
+```{r}
+RollDice <- function(num.rolls){
+  # function that returns rolls of dice
+  # ARGS: num.rolls - number of rolls
+  # RETURNS: vector of num.rolls of a die
+  return(sample(6, num.rolls, replace = T))
+}
+RollDice(2)
+```
+
+
+## Exercise: Writing and Documenting a Function
+Use the defined style guidelines to create an R script that:
+
+1. Takes a state abbreviations as an input
+2. Imports a file available at:  [http://math.montana.edu/ahoegh/teaching/stat408/datasets/HousingSales.csv](http://math.montana.edu/ahoegh/teaching/stat408/datasets/HousingSales.csv)
+3. Creates a subset of housing sales from that state.
+4. Returns a vector with the mean closing price in that state.
+
+Verify your functions works by running it twice using "MT" and "NE" as inputs.
+
+## Solution: Writing and Documenting a Function
+```{r, mysize=TRUE, size='\\tiny'}
+SummarizeHousingCosts <- function(state){
+  # computes average sales price in a state
+  # ARGS: state abbr, such as 'MT' or 'CA'
+  # RETURNS: vector with average sales price that each state
+  housing.data <- read.csv(
+    'http://math.montana.edu/ahoegh/teaching/stat408/datasets/HousingSales.csv')
+  location <- subset(housing.data, State == state)
+  mean.price <- mean(location$Closing_Price)
+  return(mean.price)
+}
+```
+
+```{r, mysize=TRUE, size='\\footnotesize'}
+SummarizeHousingCosts('MT')
+SummarizeHousingCosts('NE')
+```
+
+## Format of an R function
+Here is an example (trivial) R function.
+```{r func.def}
+SquareRoot <- function(value.in){
+  # function takes square root of value.
+  # Args: value.in - numeric value 
+  # Returns: the square root of value.in
+  return(value.in ^ .5)
+}
+```
+
+## Square Root Function
+Now consider running the function for a few values.
+```{r evalSQ}
+SquareRoot(9)
+SquareRoot(25)
+```
+Now what happens with `SquareRoot(-1)`?
+
+## Square Root Function
+```{r neqSQ}
+SquareRoot(-1)
+```
+What should happen?
+
+## Errors in R functions
+Here is an example (trivial) R function.
+```{r func.def.new}
+SquareRoot <- function(value.in){
+  # function takes square root of value.
+  # Args: value.in - numeric value 
+  # Returns: the square root of value.in
+  if (value.in < 0) stop('argument less than zero')
+  return(value.in ^ .5)
+}
+```
+
+## Square Root Function
+```{r neqSQ.new,eval=FALSE}
+SquareRoot(-1)
+```
+This returns:
+```{r error, eval=FALSE}
+> SquareRoot(-1)
+Error in SquareRoot(-1) : 
+  argument less than zero
+```
+
+## Exercise: Functions Part 2
+Now write a function that;
+
+1. Takes daily snowfall total in inches as input
+2. Takes day of week as input
+3. Returns whether to ski or stay home.
+
+Also include and the `stop()` function for errors.
+Test this function with two settings:
+
+ - snowfall = 15, day = "Sat"
+ - snowfall = -1, day = "Mon"
+
+## Solution: Functions Part 2
+```{r}
+ToSki <- function(snowfall, day){
+  # determines whether to ski or stay home
+  # ARGS: snowfall in inches, day as three letter 
+  #       abbrwith first letter capitalized
+  # RETURNS: string stating whether to ski or not
+  if (snowfall < 0) stop('snowfall should be greater 
+        than or equal to zero inches')
+  if (day == 'Sat') {
+    return('Go Ski')
+  } else if (snowfall > 5) {
+    return('Go Ski')
+  } else return('Stay Home')
+}
+```
+
+## Solution: Functions Part 2 cont..
+```{r, error = T, mysize=TRUE, size='\\small'}
+ToSki(snowfall = 15, day = "Sat")
+ToSki(-1, 'Mon')
+```
+
+
+## Course Goals
+
+With this class, we cannot cover every possible situation that you will encounter. The goals are to:
+
+1. Give you a broad range of tools that can be employed to manipulate, visualize, and analyze data, and
+2. teach you to find help when you or your code "gets stuck".
+
+
+## Process for writing code
+
+When writing code (and conducting statistical analyses) an iterative approach is a good strategy.
+
+1. Test each line of code as you write it and if necessary confirm that nested functions are giving the desired results.
+2. Start simple and then add more complexity.
+
+## Debugging Overview
+
+> Finding your bug is a process of confirming the many things that you believe are true -- until you find one which is not true. 
+- Norm Matloff
+
+## Debugging Guide 
+We will first focus on debugging when an error, or warning is tripped.
+
+1. Realize you have a bug (if error or warning, read the message)
+2. Make it repeatable
+3. Identify the problematic line (using print statements can be helpful)
+4. Fix it and test it (evaluate nested functions if necessary)
+
+## Warnings vs. Errors
+
+R will flag, print out a message, in two cases: warnings and errors.
+
+ - What is the difference between the two?
+ - Is the R process treated differently for errors and warnings?
+ 
+## Warnings vs. Errors
+
+- Fatal errors are signaled with `stop()` and force all execution of code to stop triggering an `error`.
+- Warnings are generated with `warning()` and display potential problems. Warnings **do not** stop code from executing.
+- Messages can also be passed using `message()`, which pass along information.
+
+## Bugs without warning/error
+
+In other cases, we will have bugs in our code that don't necessarily give a warning or an error.
+
+- How do we identify these bugs?
+- How can we exit a case where:
+    - R is running and may be stuck?
+    - the code won't execute because of misaligned parenthesis, braces, brackets?
+
+Note: `NA` values often return a warning message, but not always.
+
+## Exercise: Debugging a Warning
+
+Fix the script that determines if each item in a sequence is less than zero.
+
+```{r, mysize=TRUE, size='\\tiny'}
+val.in <- seq(-1,1,by=.25)
+
+if (val.in < 0){
+  print(paste(val.in, 'less than 0'))
+}
+```
+
+## Solution: Debugging a Warning
+
+```{r, mysize=TRUE, size='\\tiny'}
+val.in <- seq(-1,1,by=.25)
+
+ifelse(val.in < 0,paste(val.in, 'less than 0'),paste(val.in, 'greater than (equal to) 0'))
+```
