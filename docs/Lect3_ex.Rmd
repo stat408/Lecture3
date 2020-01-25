@@ -21,7 +21,18 @@ pi == 3
 ! (TRUE | FALSE) 
 ```
 
-Evaluate all expressions. Note `!` is R's not operator.
+
+## Exercise: Debugging a Warning
+
+Fix the script that determines if each item in a sequence is less than zero.
+
+```{r, mysize=TRUE, size='\\tiny'}
+val.in <- seq(-1,1,by=.25)
+
+if (val.in < 0){
+  print(paste(val.in, 'less than 0'))
+}
+```
 
 ## Exercise: Function Descriptions 
 Document this function with 
@@ -62,15 +73,4 @@ Test this function with two settings:
  - snowfall = 15, day = "Sat"
  - snowfall = -1, day = "Mon"
 
-## Exercise: Debugging a Warning
-
-Fix the script that determines if each item in a sequence is less than zero.
-
-```{r, mysize=TRUE, size='\\tiny'}
-val.in <- seq(-1,1,by=.25)
-
-if (val.in < 0){
-  print(paste(val.in, 'less than 0'))
-}
-```
-
+#

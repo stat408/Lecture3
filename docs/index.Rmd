@@ -110,6 +110,79 @@ plot(Seattle$Price ~ Seattle$Zip,
 >- If you are editing code, take a few minutes to look at the code around you and mimic the style.
 >- Enough about writing code; the code itself is much more interesting. Have fun!
 
+# Course Goals
+
+With this class, we cannot cover every possible situation that you will encounter. The goals are to:
+
+1. Give you a broad range of tools that can be employed to manipulate, visualize, and analyze data, and
+2. teach you to find help when you or your code "gets stuck".
+
+
+## Process for writing code
+
+When writing code (and conducting statistical analyses) an iterative approach is a good strategy.
+
+1. Test each line of code as you write it and if necessary confirm that nested functions are giving the desired results.
+2. Start simple and then add more complexity.
+
+## Debugging Overview
+
+> Finding your bug is a process of confirming the many things that you believe are true -- until you find one which is not true. 
+- Norm Matloff
+
+## Debugging Guide 
+We will first focus on debugging when an error, or warning is tripped.
+
+1. Realize you have a bug (if error or warning, read the message)
+2. Make it repeatable
+3. Identify the problematic line (using print statements can be helpful)
+4. Fix it and test it (evaluate nested functions if necessary)
+
+## Warnings vs. Errors
+
+R will flag, print out a message, in two cases: warnings and errors.
+
+ - What is the difference between the two?
+ - Is the R process treated differently for errors and warnings?
+ 
+## Warnings vs. Errors
+
+- Fatal errors are signaled with `stop()` and force all execution of code to stop triggering an `error`.
+- Warnings are generated with `warning()` and display potential problems. Warnings **do not** stop code from executing.
+- Messages can also be passed using `message()`, which pass along information.
+
+## Exercise: Debugging a Warning
+
+Fix the script that determines if each item in a sequence is less than zero.
+
+```{r, mysize=TRUE, size='\\tiny'}
+val.in <- seq(-1,1,by=.25)
+
+if (val.in < 0){
+  print(paste(val.in, 'less than 0'))
+}
+```
+
+## Solution: Debugging a Warning
+
+```{r, mysize=TRUE, size='\\tiny'}
+val.in <- seq(-1,1,by=.25)
+
+ifelse(val.in < 0,paste(val.in, 'less than 0'),paste(val.in, 'greater than (equal to) 0'))
+```
+
+## Bugs without warning/error
+
+In other cases, we will have bugs in our code that don't necessarily give a warning or an error.
+
+- How do we identify these bugs?
+- How can we exit a case where:
+    - R is running and may be stuck?
+    - the code won't execute because of misaligned parenthesis, braces, brackets?
+
+Note: `NA` values often return a warning message, but not always.
+
+
 # Tables for R Markdown
 
 ## Kable function
@@ -203,35 +276,6 @@ RollDice(2)
 ```
 
 
-## Exercise: Writing and Documenting a Function
-Use the defined style guidelines to create an R script that:
-
-1. Takes a state abbreviations as an input
-2. Imports a file available at:  [http://math.montana.edu/ahoegh/teaching/stat408/datasets/HousingSales.csv](http://math.montana.edu/ahoegh/teaching/stat408/datasets/HousingSales.csv)
-3. Creates a subset of housing sales from that state.
-4. Returns a vector with the mean closing price in that state.
-
-Verify your functions works by running it twice using "MT" and "NE" as inputs.
-
-## Solution: Writing and Documenting a Function
-```{r, mysize=TRUE, size='\\tiny'}
-SummarizeHousingCosts <- function(state){
-  # computes average sales price in a state
-  # ARGS: state abbr, such as 'MT' or 'CA'
-  # RETURNS: vector with average sales price that each state
-  housing.data <- read.csv(
-    'http://math.montana.edu/ahoegh/teaching/stat408/datasets/HousingSales.csv')
-  location <- subset(housing.data, State == state)
-  mean.price <- mean(location$Closing_Price)
-  return(mean.price)
-}
-```
-
-```{r, mysize=TRUE, size='\\footnotesize'}
-SummarizeHousingCosts('MT')
-SummarizeHousingCosts('NE')
-```
-
 ## Format of an R function
 Here is an example (trivial) R function.
 ```{r func.def}
@@ -280,6 +324,36 @@ Error in SquareRoot(-1) :
   argument less than zero
 ```
 
+## Exercise: Writing and Documenting a Function
+Use the defined style guidelines to create an R script that:
+
+1. Takes a state abbreviations as an input
+2. Imports a file available at:  [http://math.montana.edu/ahoegh/teaching/stat408/datasets/HousingSales.csv](http://math.montana.edu/ahoegh/teaching/stat408/datasets/HousingSales.csv)
+3. Creates a subset of housing sales from that state.
+4. Returns a vector with the mean closing price in that state.
+
+Verify your functions works by running it twice using "MT" and "NE" as inputs.
+
+## Solution: Writing and Documenting a Function
+```{r, mysize=TRUE, size='\\tiny'}
+SummarizeHousingCosts <- function(state){
+  # computes average sales price in a state
+  # ARGS: state abbr, such as 'MT' or 'CA'
+  # RETURNS: vector with average sales price that each state
+  housing.data <- read.csv(
+    'http://math.montana.edu/ahoegh/teaching/stat408/datasets/HousingSales.csv')
+  location <- subset(housing.data, State == state)
+  mean.price <- mean(location$Closing_Price)
+  return(mean.price)
+}
+```
+
+
+```{r, mysize=TRUE, size='\\footnotesize'}
+SummarizeHousingCosts('MT')
+SummarizeHousingCosts('NE')
+```
+
 ## Exercise: Functions Part 2
 Now write a function that;
 
@@ -314,77 +388,4 @@ ToSki <- function(snowfall, day){
 ```{r, error = T, mysize=TRUE, size='\\small'}
 ToSki(snowfall = 15, day = "Sat")
 ToSki(-1, 'Mon')
-```
-
-
-## Course Goals
-
-With this class, we cannot cover every possible situation that you will encounter. The goals are to:
-
-1. Give you a broad range of tools that can be employed to manipulate, visualize, and analyze data, and
-2. teach you to find help when you or your code "gets stuck".
-
-
-## Process for writing code
-
-When writing code (and conducting statistical analyses) an iterative approach is a good strategy.
-
-1. Test each line of code as you write it and if necessary confirm that nested functions are giving the desired results.
-2. Start simple and then add more complexity.
-
-## Debugging Overview
-
-> Finding your bug is a process of confirming the many things that you believe are true -- until you find one which is not true. 
-- Norm Matloff
-
-## Debugging Guide 
-We will first focus on debugging when an error, or warning is tripped.
-
-1. Realize you have a bug (if error or warning, read the message)
-2. Make it repeatable
-3. Identify the problematic line (using print statements can be helpful)
-4. Fix it and test it (evaluate nested functions if necessary)
-
-## Warnings vs. Errors
-
-R will flag, print out a message, in two cases: warnings and errors.
-
- - What is the difference between the two?
- - Is the R process treated differently for errors and warnings?
- 
-## Warnings vs. Errors
-
-- Fatal errors are signaled with `stop()` and force all execution of code to stop triggering an `error`.
-- Warnings are generated with `warning()` and display potential problems. Warnings **do not** stop code from executing.
-- Messages can also be passed using `message()`, which pass along information.
-
-## Bugs without warning/error
-
-In other cases, we will have bugs in our code that don't necessarily give a warning or an error.
-
-- How do we identify these bugs?
-- How can we exit a case where:
-    - R is running and may be stuck?
-    - the code won't execute because of misaligned parenthesis, braces, brackets?
-
-Note: `NA` values often return a warning message, but not always.
-
-## Exercise: Debugging a Warning
-
-Fix the script that determines if each item in a sequence is less than zero.
-
-```{r, mysize=TRUE, size='\\tiny'}
-val.in <- seq(-1,1,by=.25)
-
-if (val.in < 0){
-  print(paste(val.in, 'less than 0'))
-}
-```
-
-## Solution: Debugging a Warning
-
-```{r, mysize=TRUE, size='\\tiny'}
-val.in <- seq(-1,1,by=.25)
-
-ifelse(val.in < 0,paste(val.in, 'less than 0'),paste(val.in, 'greater than (equal to) 0'))
 ```

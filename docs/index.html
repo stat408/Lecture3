@@ -1943,16 +1943,87 @@ document.getElementsByTagName('head')[0].appendChild(style);
 <li>Enough about writing code; the code itself is much more interesting. Have fun!</li>
 </ul>
 </section></section>
+<section><section id="course-goals" class="title-slide slide level1"><h1>Course Goals</h1></section><section id="process-for-writing-code" class="slide level2">
+<h2>Process for writing code</h2>
+<p>When writing code (and conducting statistical analyses) an iterative approach is a good strategy.</p>
+<ol type="1">
+<li class="fragment">Test each line of code as you write it and if necessary confirm that nested functions are giving the desired results.</li>
+<li class="fragment">Start simple and then add more complexity.</li>
+</ol>
+</section><section id="debugging-overview" class="slide level2">
+<h2>Debugging Overview</h2>
+<blockquote>
+<p>Finding your bug is a process of confirming the many things that you believe are true – until you find one which is not true. - Norm Matloff</p>
+</blockquote>
+</section><section id="debugging-guide" class="slide level2">
+<h2>Debugging Guide</h2>
+<p>We will first focus on debugging when an error, or warning is tripped.</p>
+<ol type="1">
+<li class="fragment">Realize you have a bug (if error or warning, read the message)</li>
+<li class="fragment">Make it repeatable</li>
+<li class="fragment">Identify the problematic line (using print statements can be helpful)</li>
+<li class="fragment">Fix it and test it (evaluate nested functions if necessary)</li>
+</ol>
+</section><section id="warnings-vs.errors" class="slide level2">
+<h2>Warnings vs. Errors</h2>
+<p>R will flag, print out a message, in two cases: warnings and errors.</p>
+<ul>
+<li class="fragment">What is the difference between the two?</li>
+<li class="fragment">Is the R process treated differently for errors and warnings?</li>
+</ul>
+</section><section id="warnings-vs.errors-1" class="slide level2">
+<h2>Warnings vs. Errors</h2>
+<ul>
+<li class="fragment">Fatal errors are signaled with <code>stop()</code> and force all execution of code to stop triggering an <code>error</code>.</li>
+<li class="fragment">Warnings are generated with <code>warning()</code> and display potential problems. Warnings <strong>do not</strong> stop code from executing.</li>
+<li class="fragment">Messages can also be passed using <code>message()</code>, which pass along information.</li>
+</ul>
+</section><section id="exercise-debugging-a-warning" class="slide level2">
+<h2>Exercise: Debugging a Warning</h2>
+<p>Fix the script that determines if each item in a sequence is less than zero.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">val.in &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>,<span class="dt">by=</span>.<span class="dv">25</span>)</a>
+<a class="sourceLine" id="cb15-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="cf">if</span> (val.in <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span>){</a>
+<a class="sourceLine" id="cb15-4" data-line-number="4">  <span class="kw">print</span>(<span class="kw">paste</span>(val.in, <span class="st">'less than 0'</span>))</a>
+<a class="sourceLine" id="cb15-5" data-line-number="5">}</a></code></pre></div>
+<pre><code>## Warning in if (val.in &lt; 0) {: the condition has length &gt; 1 and only the first
+## element will be used</code></pre>
+<pre><code>## [1] &quot;-1 less than 0&quot;    &quot;-0.75 less than 0&quot; &quot;-0.5 less than 0&quot; 
+## [4] &quot;-0.25 less than 0&quot; &quot;0 less than 0&quot;     &quot;0.25 less than 0&quot; 
+## [7] &quot;0.5 less than 0&quot;   &quot;0.75 less than 0&quot;  &quot;1 less than 0&quot;</code></pre>
+</section><section id="solution-debugging-a-warning" class="slide level2">
+<h2>Solution: Debugging a Warning</h2>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">val.in &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>,<span class="dt">by=</span>.<span class="dv">25</span>)</a>
+<a class="sourceLine" id="cb18-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb18-3" data-line-number="3"><span class="kw">ifelse</span>(val.in <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span>,<span class="kw">paste</span>(val.in, <span class="st">'less than 0'</span>),<span class="kw">paste</span>(val.in, <span class="st">'greater than (equal to) 0'</span>))</a></code></pre></div>
+<pre><code>## [1] &quot;-1 less than 0&quot;                 &quot;-0.75 less than 0&quot;             
+## [3] &quot;-0.5 less than 0&quot;               &quot;-0.25 less than 0&quot;             
+## [5] &quot;0 greater than (equal to) 0&quot;    &quot;0.25 greater than (equal to) 0&quot;
+## [7] &quot;0.5 greater than (equal to) 0&quot;  &quot;0.75 greater than (equal to) 0&quot;
+## [9] &quot;1 greater than (equal to) 0&quot;</code></pre>
+</section><section id="bugs-without-warningerror" class="slide level2">
+<h2>Bugs without warning/error</h2>
+<p>In other cases, we will have bugs in our code that don’t necessarily give a warning or an error.</p>
+<ul>
+<li class="fragment">How do we identify these bugs?</li>
+<li class="fragment">How can we exit a case where:
+<ul>
+<li class="fragment">R is running and may be stuck?</li>
+<li class="fragment">the code won’t execute because of misaligned parenthesis, braces, brackets?</li>
+</ul></li>
+</ul>
+<p>Note: <code>NA</code> values often return a warning message, but not always.</p>
+</section></section>
 <section><section id="tables-for-r-markdown" class="title-slide slide level1"><h1>Tables for R Markdown</h1></section><section id="kable-function" class="slide level2">
 <h2>Kable function</h2>
 <p>Note that output from R can often be hard to read. Luckily there are several options for creating nicely formatted tables. One, which we will use, is the kable function.</p>
 </section><section id="kable-function-1" class="slide level2">
 <h2>Kable function</h2>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">library</span>(knitr)</a>
-<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="kw">kable</span>(<span class="kw">aggregate</span>(Loblolly<span class="op">$</span>height,</a>
-<a class="sourceLine" id="cb15-3" data-line-number="3">      <span class="dt">by=</span><span class="kw">list</span>(Loblolly<span class="op">$</span>age),mean), <span class="dt">digits=</span><span class="dv">3</span>,</a>
-<a class="sourceLine" id="cb15-4" data-line-number="4">      <span class="dt">caption=</span> <span class="st">'Average height of loblolly pine by age'</span>,</a>
-<a class="sourceLine" id="cb15-5" data-line-number="5">      <span class="dt">col.names =</span> <span class="kw">c</span>(<span class="st">'Tree Age'</span>,<span class="st">'Height (ft)'</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="kw">library</span>(knitr)</a>
+<a class="sourceLine" id="cb20-2" data-line-number="2"><span class="kw">kable</span>(<span class="kw">aggregate</span>(Loblolly<span class="op">$</span>height,</a>
+<a class="sourceLine" id="cb20-3" data-line-number="3">      <span class="dt">by=</span><span class="kw">list</span>(Loblolly<span class="op">$</span>age),mean), <span class="dt">digits=</span><span class="dv">3</span>,</a>
+<a class="sourceLine" id="cb20-4" data-line-number="4">      <span class="dt">caption=</span> <span class="st">'Average height of loblolly pine by age'</span>,</a>
+<a class="sourceLine" id="cb20-5" data-line-number="5">      <span class="dt">col.names =</span> <span class="kw">c</span>(<span class="st">'Tree Age'</span>,<span class="st">'Height (ft)'</span>))</a></code></pre></div>
 <table>
 <caption>Average height of loblolly pine by age</caption>
 <thead>
@@ -2023,14 +2094,14 @@ document.getElementsByTagName('head')[0].appendChild(style);
 </section><section id="overview-functions-in-r" class="slide level2">
 <h2>Overview Functions in R</h2>
 <p>Functions are a way to save elements of code to be used repeatedly.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">RollDice &lt;-<span class="st"> </span><span class="cf">function</span>(num.rolls){</a>
-<a class="sourceLine" id="cb16-2" data-line-number="2">  <span class="co"># </span></a>
-<a class="sourceLine" id="cb16-3" data-line-number="3">  <span class="co"># ARGS: </span></a>
-<a class="sourceLine" id="cb16-4" data-line-number="4">  <span class="co"># RETURNS: </span></a>
-<a class="sourceLine" id="cb16-5" data-line-number="5">  <span class="kw">return</span>(<span class="kw">sample</span>(<span class="dv">6</span>, num.rolls, <span class="dt">replace =</span> T))</a>
-<a class="sourceLine" id="cb16-6" data-line-number="6">}</a>
-<a class="sourceLine" id="cb16-7" data-line-number="7"><span class="kw">RollDice</span>(<span class="dv">2</span>)</a></code></pre></div>
-<pre><code>## [1] 1 1</code></pre>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1">RollDice &lt;-<span class="st"> </span><span class="cf">function</span>(num.rolls){</a>
+<a class="sourceLine" id="cb21-2" data-line-number="2">  <span class="co"># </span></a>
+<a class="sourceLine" id="cb21-3" data-line-number="3">  <span class="co"># ARGS: </span></a>
+<a class="sourceLine" id="cb21-4" data-line-number="4">  <span class="co"># RETURNS: </span></a>
+<a class="sourceLine" id="cb21-5" data-line-number="5">  <span class="kw">return</span>(<span class="kw">sample</span>(<span class="dv">6</span>, num.rolls, <span class="dt">replace =</span> T))</a>
+<a class="sourceLine" id="cb21-6" data-line-number="6">}</a>
+<a class="sourceLine" id="cb21-7" data-line-number="7"><span class="kw">RollDice</span>(<span class="dv">2</span>)</a></code></pre></div>
+<pre><code>## [1] 6 5</code></pre>
 </section><section id="exercise-function-descriptions" class="slide level2">
 <h2>Exercise: Function Descriptions</h2>
 <p>Document this function with</p>
@@ -2039,48 +2110,22 @@ document.getElementsByTagName('head')[0].appendChild(style);
 <li class="fragment">summary of input(s)</li>
 <li class="fragment">summary of outputs</li>
 </ol>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">RollDice &lt;-<span class="st"> </span><span class="cf">function</span>(num.rolls){</a>
-<a class="sourceLine" id="cb18-2" data-line-number="2">  <span class="co"># </span></a>
-<a class="sourceLine" id="cb18-3" data-line-number="3">  <span class="co"># ARGS:</span></a>
-<a class="sourceLine" id="cb18-4" data-line-number="4">  <span class="co"># RETURNS: </span></a>
-<a class="sourceLine" id="cb18-5" data-line-number="5">  <span class="kw">return</span>(<span class="kw">sample</span>(<span class="dv">6</span>, num.rolls, <span class="dt">replace =</span> T))</a>
-<a class="sourceLine" id="cb18-6" data-line-number="6">}</a></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1">RollDice &lt;-<span class="st"> </span><span class="cf">function</span>(num.rolls){</a>
+<a class="sourceLine" id="cb23-2" data-line-number="2">  <span class="co"># </span></a>
+<a class="sourceLine" id="cb23-3" data-line-number="3">  <span class="co"># ARGS:</span></a>
+<a class="sourceLine" id="cb23-4" data-line-number="4">  <span class="co"># RETURNS: </span></a>
+<a class="sourceLine" id="cb23-5" data-line-number="5">  <span class="kw">return</span>(<span class="kw">sample</span>(<span class="dv">6</span>, num.rolls, <span class="dt">replace =</span> T))</a>
+<a class="sourceLine" id="cb23-6" data-line-number="6">}</a></code></pre></div>
 </section><section id="solution-function-descriptions" class="slide level2">
 <h2>Solution: Function Descriptions</h2>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1">RollDice &lt;-<span class="st"> </span><span class="cf">function</span>(num.rolls){</a>
-<a class="sourceLine" id="cb19-2" data-line-number="2">  <span class="co"># function that returns rolls of dice</span></a>
-<a class="sourceLine" id="cb19-3" data-line-number="3">  <span class="co"># ARGS: num.rolls - number of rolls</span></a>
-<a class="sourceLine" id="cb19-4" data-line-number="4">  <span class="co"># RETURNS: vector of num.rolls of a die</span></a>
-<a class="sourceLine" id="cb19-5" data-line-number="5">  <span class="kw">return</span>(<span class="kw">sample</span>(<span class="dv">6</span>, num.rolls, <span class="dt">replace =</span> T))</a>
-<a class="sourceLine" id="cb19-6" data-line-number="6">}</a>
-<a class="sourceLine" id="cb19-7" data-line-number="7"><span class="kw">RollDice</span>(<span class="dv">2</span>)</a></code></pre></div>
-<pre><code>## [1] 6 6</code></pre>
-</section><section id="exercise-writing-and-documenting-a-function" class="slide level2">
-<h2>Exercise: Writing and Documenting a Function</h2>
-<p>Use the defined style guidelines to create an R script that:</p>
-<ol type="1">
-<li class="fragment">Takes a state abbreviations as an input</li>
-<li class="fragment">Imports a file available at: <a href="http://math.montana.edu/ahoegh/teaching/stat408/datasets/HousingSales.csv">http://math.montana.edu/ahoegh/teaching/stat408/datasets/HousingSales.csv</a></li>
-<li class="fragment">Creates a subset of housing sales from that state.</li>
-<li class="fragment">Returns a vector with the mean closing price in that state.</li>
-</ol>
-<p>Verify your functions works by running it twice using “MT” and “NE” as inputs.</p>
-</section><section id="solution-writing-and-documenting-a-function" class="slide level2">
-<h2>Solution: Writing and Documenting a Function</h2>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1">SummarizeHousingCosts &lt;-<span class="st"> </span><span class="cf">function</span>(state){</a>
-<a class="sourceLine" id="cb21-2" data-line-number="2">  <span class="co"># computes average sales price in a state</span></a>
-<a class="sourceLine" id="cb21-3" data-line-number="3">  <span class="co"># ARGS: state abbr, such as 'MT' or 'CA'</span></a>
-<a class="sourceLine" id="cb21-4" data-line-number="4">  <span class="co"># RETURNS: vector with average sales price that each state</span></a>
-<a class="sourceLine" id="cb21-5" data-line-number="5">  housing.data &lt;-<span class="st"> </span><span class="kw">read.csv</span>(</a>
-<a class="sourceLine" id="cb21-6" data-line-number="6">    <span class="st">'http://math.montana.edu/ahoegh/teaching/stat408/datasets/HousingSales.csv'</span>)</a>
-<a class="sourceLine" id="cb21-7" data-line-number="7">  location &lt;-<span class="st"> </span><span class="kw">subset</span>(housing.data, State <span class="op">==</span><span class="st"> </span>state)</a>
-<a class="sourceLine" id="cb21-8" data-line-number="8">  mean.price &lt;-<span class="st"> </span><span class="kw">mean</span>(location<span class="op">$</span>Closing_Price)</a>
-<a class="sourceLine" id="cb21-9" data-line-number="9">  <span class="kw">return</span>(mean.price)</a>
-<a class="sourceLine" id="cb21-10" data-line-number="10">}</a></code></pre></div>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="kw">SummarizeHousingCosts</span>(<span class="st">'MT'</span>)</a></code></pre></div>
-<pre><code>## [1] 164608</code></pre>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="kw">SummarizeHousingCosts</span>(<span class="st">'NE'</span>)</a></code></pre></div>
-<pre><code>## [1] 152050</code></pre>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1">RollDice &lt;-<span class="st"> </span><span class="cf">function</span>(num.rolls){</a>
+<a class="sourceLine" id="cb24-2" data-line-number="2">  <span class="co"># function that returns rolls of dice</span></a>
+<a class="sourceLine" id="cb24-3" data-line-number="3">  <span class="co"># ARGS: num.rolls - number of rolls</span></a>
+<a class="sourceLine" id="cb24-4" data-line-number="4">  <span class="co"># RETURNS: vector of num.rolls of a die</span></a>
+<a class="sourceLine" id="cb24-5" data-line-number="5">  <span class="kw">return</span>(<span class="kw">sample</span>(<span class="dv">6</span>, num.rolls, <span class="dt">replace =</span> T))</a>
+<a class="sourceLine" id="cb24-6" data-line-number="6">}</a>
+<a class="sourceLine" id="cb24-7" data-line-number="7"><span class="kw">RollDice</span>(<span class="dv">2</span>)</a></code></pre></div>
+<pre><code>## [1] 6 2</code></pre>
 </section><section id="format-of-an-r-function" class="slide level2">
 <h2>Format of an R function</h2>
 <p>Here is an example (trivial) R function.</p>
@@ -2120,6 +2165,32 @@ document.getElementsByTagName('head')[0].appendChild(style);
 <div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1"><span class="op">&gt;</span><span class="st"> </span><span class="kw">SquareRoot</span>(<span class="op">-</span><span class="dv">1</span>)</a>
 <a class="sourceLine" id="cb35-2" data-line-number="2">Error <span class="cf">in</span> <span class="kw">SquareRoot</span>(<span class="op">-</span><span class="dv">1</span>) <span class="op">:</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb35-3" data-line-number="3"><span class="st">  </span>argument less than zero</a></code></pre></div>
+</section><section id="exercise-writing-and-documenting-a-function" class="slide level2">
+<h2>Exercise: Writing and Documenting a Function</h2>
+<p>Use the defined style guidelines to create an R script that:</p>
+<ol type="1">
+<li class="fragment">Takes a state abbreviations as an input</li>
+<li class="fragment">Imports a file available at: <a href="http://math.montana.edu/ahoegh/teaching/stat408/datasets/HousingSales.csv">http://math.montana.edu/ahoegh/teaching/stat408/datasets/HousingSales.csv</a></li>
+<li class="fragment">Creates a subset of housing sales from that state.</li>
+<li class="fragment">Returns a vector with the mean closing price in that state.</li>
+</ol>
+<p>Verify your functions works by running it twice using “MT” and “NE” as inputs.</p>
+</section><section id="solution-writing-and-documenting-a-function" class="slide level2">
+<h2>Solution: Writing and Documenting a Function</h2>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1">SummarizeHousingCosts &lt;-<span class="st"> </span><span class="cf">function</span>(state){</a>
+<a class="sourceLine" id="cb36-2" data-line-number="2">  <span class="co"># computes average sales price in a state</span></a>
+<a class="sourceLine" id="cb36-3" data-line-number="3">  <span class="co"># ARGS: state abbr, such as 'MT' or 'CA'</span></a>
+<a class="sourceLine" id="cb36-4" data-line-number="4">  <span class="co"># RETURNS: vector with average sales price that each state</span></a>
+<a class="sourceLine" id="cb36-5" data-line-number="5">  housing.data &lt;-<span class="st"> </span><span class="kw">read.csv</span>(</a>
+<a class="sourceLine" id="cb36-6" data-line-number="6">    <span class="st">'http://math.montana.edu/ahoegh/teaching/stat408/datasets/HousingSales.csv'</span>)</a>
+<a class="sourceLine" id="cb36-7" data-line-number="7">  location &lt;-<span class="st"> </span><span class="kw">subset</span>(housing.data, State <span class="op">==</span><span class="st"> </span>state)</a>
+<a class="sourceLine" id="cb36-8" data-line-number="8">  mean.price &lt;-<span class="st"> </span><span class="kw">mean</span>(location<span class="op">$</span>Closing_Price)</a>
+<a class="sourceLine" id="cb36-9" data-line-number="9">  <span class="kw">return</span>(mean.price)</a>
+<a class="sourceLine" id="cb36-10" data-line-number="10">}</a></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1"><span class="kw">SummarizeHousingCosts</span>(<span class="st">'MT'</span>)</a></code></pre></div>
+<pre><code>## [1] 164608</code></pre>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1"><span class="kw">SummarizeHousingCosts</span>(<span class="st">'NE'</span>)</a></code></pre></div>
+<pre><code>## [1] 152050</code></pre>
 </section><section id="exercise-functions-part-2" class="slide level2">
 <h2>Exercise: Functions Part 2</h2>
 <p>Now write a function that;</p>
@@ -2135,103 +2206,26 @@ document.getElementsByTagName('head')[0].appendChild(style);
 </ul>
 </section><section id="solution-functions-part-2" class="slide level2">
 <h2>Solution: Functions Part 2</h2>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1">ToSki &lt;-<span class="st"> </span><span class="cf">function</span>(snowfall, day){</a>
-<a class="sourceLine" id="cb36-2" data-line-number="2">  <span class="co"># determines whether to ski or stay home</span></a>
-<a class="sourceLine" id="cb36-3" data-line-number="3">  <span class="co"># ARGS: snowfall in inches, day as three letter </span></a>
-<a class="sourceLine" id="cb36-4" data-line-number="4">  <span class="co">#       abbrwith first letter capitalized</span></a>
-<a class="sourceLine" id="cb36-5" data-line-number="5">  <span class="co"># RETURNS: string stating whether to ski or not</span></a>
-<a class="sourceLine" id="cb36-6" data-line-number="6">  <span class="cf">if</span> (snowfall <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span>) <span class="kw">stop</span>(<span class="st">'snowfall should be greater </span></a>
-<a class="sourceLine" id="cb36-7" data-line-number="7"><span class="st">        than or equal to zero inches'</span>)</a>
-<a class="sourceLine" id="cb36-8" data-line-number="8">  <span class="cf">if</span> (day <span class="op">==</span><span class="st"> 'Sat'</span>) {</a>
-<a class="sourceLine" id="cb36-9" data-line-number="9">    <span class="kw">return</span>(<span class="st">'Go Ski'</span>)</a>
-<a class="sourceLine" id="cb36-10" data-line-number="10">  } <span class="cf">else</span> <span class="cf">if</span> (snowfall <span class="op">&gt;</span><span class="st"> </span><span class="dv">5</span>) {</a>
-<a class="sourceLine" id="cb36-11" data-line-number="11">    <span class="kw">return</span>(<span class="st">'Go Ski'</span>)</a>
-<a class="sourceLine" id="cb36-12" data-line-number="12">  } <span class="cf">else</span> <span class="kw">return</span>(<span class="st">'Stay Home'</span>)</a>
-<a class="sourceLine" id="cb36-13" data-line-number="13">}</a></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1">ToSki &lt;-<span class="st"> </span><span class="cf">function</span>(snowfall, day){</a>
+<a class="sourceLine" id="cb41-2" data-line-number="2">  <span class="co"># determines whether to ski or stay home</span></a>
+<a class="sourceLine" id="cb41-3" data-line-number="3">  <span class="co"># ARGS: snowfall in inches, day as three letter </span></a>
+<a class="sourceLine" id="cb41-4" data-line-number="4">  <span class="co">#       abbrwith first letter capitalized</span></a>
+<a class="sourceLine" id="cb41-5" data-line-number="5">  <span class="co"># RETURNS: string stating whether to ski or not</span></a>
+<a class="sourceLine" id="cb41-6" data-line-number="6">  <span class="cf">if</span> (snowfall <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span>) <span class="kw">stop</span>(<span class="st">'snowfall should be greater </span></a>
+<a class="sourceLine" id="cb41-7" data-line-number="7"><span class="st">        than or equal to zero inches'</span>)</a>
+<a class="sourceLine" id="cb41-8" data-line-number="8">  <span class="cf">if</span> (day <span class="op">==</span><span class="st"> 'Sat'</span>) {</a>
+<a class="sourceLine" id="cb41-9" data-line-number="9">    <span class="kw">return</span>(<span class="st">'Go Ski'</span>)</a>
+<a class="sourceLine" id="cb41-10" data-line-number="10">  } <span class="cf">else</span> <span class="cf">if</span> (snowfall <span class="op">&gt;</span><span class="st"> </span><span class="dv">5</span>) {</a>
+<a class="sourceLine" id="cb41-11" data-line-number="11">    <span class="kw">return</span>(<span class="st">'Go Ski'</span>)</a>
+<a class="sourceLine" id="cb41-12" data-line-number="12">  } <span class="cf">else</span> <span class="kw">return</span>(<span class="st">'Stay Home'</span>)</a>
+<a class="sourceLine" id="cb41-13" data-line-number="13">}</a></code></pre></div>
 </section><section id="solution-functions-part-2-cont.." class="slide level2">
 <h2>Solution: Functions Part 2 cont..</h2>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1"><span class="kw">ToSki</span>(<span class="dt">snowfall =</span> <span class="dv">15</span>, <span class="dt">day =</span> <span class="st">&quot;Sat&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" data-line-number="1"><span class="kw">ToSki</span>(<span class="dt">snowfall =</span> <span class="dv">15</span>, <span class="dt">day =</span> <span class="st">&quot;Sat&quot;</span>)</a></code></pre></div>
 <pre><code>## [1] &quot;Go Ski&quot;</code></pre>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1"><span class="kw">ToSki</span>(<span class="op">-</span><span class="dv">1</span>, <span class="st">'Mon'</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1"><span class="kw">ToSki</span>(<span class="op">-</span><span class="dv">1</span>, <span class="st">'Mon'</span>)</a></code></pre></div>
 <pre><code>## Error in ToSki(-1, &quot;Mon&quot;): snowfall should be greater 
 ##         than or equal to zero inches</code></pre>
-</section><section id="course-goals" class="slide level2">
-<h2>Course Goals</h2>
-<p>With this class, we cannot cover every possible situation that you will encounter. The goals are to:</p>
-<ol type="1">
-<li class="fragment">Give you a broad range of tools that can be employed to manipulate, visualize, and analyze data, and</li>
-<li class="fragment">teach you to find help when you or your code “gets stuck”.</li>
-</ol>
-</section><section id="process-for-writing-code" class="slide level2">
-<h2>Process for writing code</h2>
-<p>When writing code (and conducting statistical analyses) an iterative approach is a good strategy.</p>
-<ol type="1">
-<li class="fragment">Test each line of code as you write it and if necessary confirm that nested functions are giving the desired results.</li>
-<li class="fragment">Start simple and then add more complexity.</li>
-</ol>
-</section><section id="debugging-overview" class="slide level2">
-<h2>Debugging Overview</h2>
-<blockquote>
-<p>Finding your bug is a process of confirming the many things that you believe are true – until you find one which is not true. - Norm Matloff</p>
-</blockquote>
-</section><section id="debugging-guide" class="slide level2">
-<h2>Debugging Guide</h2>
-<p>We will first focus on debugging when an error, or warning is tripped.</p>
-<ol type="1">
-<li class="fragment">Realize you have a bug (if error or warning, read the message)</li>
-<li class="fragment">Make it repeatable</li>
-<li class="fragment">Identify the problematic line (using print statements can be helpful)</li>
-<li class="fragment">Fix it and test it (evaluate nested functions if necessary)</li>
-</ol>
-</section><section id="warnings-vs.errors" class="slide level2">
-<h2>Warnings vs. Errors</h2>
-<p>R will flag, print out a message, in two cases: warnings and errors.</p>
-<ul>
-<li class="fragment">What is the difference between the two?</li>
-<li class="fragment">Is the R process treated differently for errors and warnings?</li>
-</ul>
-</section><section id="warnings-vs.errors-1" class="slide level2">
-<h2>Warnings vs. Errors</h2>
-<ul>
-<li class="fragment">Fatal errors are signaled with <code>stop()</code> and force all execution of code to stop triggering an <code>error</code>.</li>
-<li class="fragment">Warnings are generated with <code>warning()</code> and display potential problems. Warnings <strong>do not</strong> stop code from executing.</li>
-<li class="fragment">Messages can also be passed using <code>message()</code>, which pass along information.</li>
-</ul>
-</section><section id="bugs-without-warningerror" class="slide level2">
-<h2>Bugs without warning/error</h2>
-<p>In other cases, we will have bugs in our code that don’t necessarily give a warning or an error.</p>
-<ul>
-<li class="fragment">How do we identify these bugs?</li>
-<li class="fragment">How can we exit a case where:
-<ul>
-<li class="fragment">R is running and may be stuck?</li>
-<li class="fragment">the code won’t execute because of misaligned parenthesis, braces, brackets?</li>
-</ul></li>
-</ul>
-<p>Note: <code>NA</code> values often return a warning message, but not always.</p>
-</section><section id="exercise-debugging-a-warning" class="slide level2">
-<h2>Exercise: Debugging a Warning</h2>
-<p>Fix the script that determines if each item in a sequence is less than zero.</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1">val.in &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>,<span class="dt">by=</span>.<span class="dv">25</span>)</a>
-<a class="sourceLine" id="cb41-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb41-3" data-line-number="3"><span class="cf">if</span> (val.in <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span>){</a>
-<a class="sourceLine" id="cb41-4" data-line-number="4">  <span class="kw">print</span>(<span class="kw">paste</span>(val.in, <span class="st">'less than 0'</span>))</a>
-<a class="sourceLine" id="cb41-5" data-line-number="5">}</a></code></pre></div>
-<pre><code>## Warning in if (val.in &lt; 0) {: the condition has length &gt; 1 and only the
-## first element will be used</code></pre>
-<pre><code>## [1] &quot;-1 less than 0&quot;    &quot;-0.75 less than 0&quot; &quot;-0.5 less than 0&quot; 
-## [4] &quot;-0.25 less than 0&quot; &quot;0 less than 0&quot;     &quot;0.25 less than 0&quot; 
-## [7] &quot;0.5 less than 0&quot;   &quot;0.75 less than 0&quot;  &quot;1 less than 0&quot;</code></pre>
-</section><section id="solution-debugging-a-warning" class="slide level2">
-<h2>Solution: Debugging a Warning</h2>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1">val.in &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>,<span class="dt">by=</span>.<span class="dv">25</span>)</a>
-<a class="sourceLine" id="cb44-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb44-3" data-line-number="3"><span class="kw">ifelse</span>(val.in <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span>,<span class="kw">paste</span>(val.in, <span class="st">'less than 0'</span>),<span class="kw">paste</span>(val.in, <span class="st">'greater than (equal to) 0'</span>))</a></code></pre></div>
-<pre><code>## [1] &quot;-1 less than 0&quot;                 &quot;-0.75 less than 0&quot;             
-## [3] &quot;-0.5 less than 0&quot;               &quot;-0.25 less than 0&quot;             
-## [5] &quot;0 greater than (equal to) 0&quot;    &quot;0.25 greater than (equal to) 0&quot;
-## [7] &quot;0.5 greater than (equal to) 0&quot;  &quot;0.75 greater than (equal to) 0&quot;
-## [9] &quot;1 greater than (equal to) 0&quot;</code></pre>
 </section></section>
     </div>
   </div>
