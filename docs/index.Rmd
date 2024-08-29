@@ -1,5 +1,5 @@
 ---
-title: "R Overview"
+title: "R Basics"
 output:
   revealjs::revealjs_presentation:
     theme: white
@@ -15,41 +15,18 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 # R Intro
 
-## Why use R?
-R is:
-
-- a free public domain implementation of S,
-- the standard among (academic) professional statisticians,
-- available for Windows, Mac, and Linux,
-- an object-oriented and functional programming structure, and 
-- designed to connect to high-performance programming languages like C, Fortran, and Julia.
-
-
-## Why use R?
-R has:
-
-- an open-software environment with a large community that makes getting help easy,
-- a massive set of packages for statistical modeling, data science, visualization, and importing and manipulating data,
-- powerful tools for replicating and communicating your results,
-- an interactive development environment (R Studio) tailored for interactive data analysis and statistical programmming,
-- available for Windows, Mac, and Linux, and
-- an object-oriented and functional programming structure.
-
-
 ## Reading Data files
-The ability to datasets into R is an essential skill. For this class, most of the files will be on the course webpage and can be directly downloaded using `read.csv`. Consider the Seattle Housing dataset from Lab 1.
+The ability to datasets into R is an essential skill. For this class, most of the files will be on the course webpage and can be directly downloaded using `read_csv`. Consider the Seattle Housing dataset from the previous lecture.
 
 ```{r read.data}
-Seattle <- read.csv(
-  'http://math.montana.edu/ahoegh/teaching/stat408/datasets/SeattleHousing.csv', 
-  stringsAsFactors = F)
+Seattle <- read_csv('http://math.montana.edu/ahoegh/teaching/stat408/datasets/SeattleHousing.csv')
 ```
 
 ## Reading Data files
-Recall we can also use the `read_csv()` function from the tidyverse.
+Recall we can also use the `read.csv()` function from the tidyverse.
 
 ```{r}
-Seattle2 <- read_csv('http://math.montana.edu/ahoegh/teaching/stat408/datasets/SeattleHousing.csv')
+Seattle2 <- read.csv('http://math.montana.edu/ahoegh/teaching/stat408/datasets/SeattleHousing.csv')
 ```
 
 ## Viewing Data files
@@ -58,6 +35,39 @@ A common function that we will use is `head`, which shows the first few rows of 
 ```{r}
 head(Seattle)
 ```
+
+## Viewing Data files
+A common function that we will use is `head`, which shows the first few rows of a data frame.
+
+```{r}
+glimpse(Seattle)
+```
+
+
+## Viewing Data files
+A common function that we will use is `head`, which shows the first few rows of a data frame.
+
+```{r}
+head(Seattle2)
+```
+
+## Viewing Data files
+A common function that we will use is `head`, which shows the first few rows of a data frame.
+
+```{r}
+glimpse(Seattle2)
+```
+
+
+## Activity: Reading excel files
+
+The `readxl` package makes importing excel data files easy. 
+
+- Find an excel dataset (https://catalog.data.gov/dataset/?q=&_res_format_limit=0&res_format=EXCEL)
+- Download the dataset
+- Read this into R, pay attention to the sheet names.
+- Extra. Write the Seattle dataset from R to CSV and then XLS.
+
 
 
 # R Data Structures
@@ -203,17 +213,12 @@ df[,1]
 df[-1,c(2:3)]
 ```
 
-## Data Frame Subsetting: II
-There are also a couple built in functions in R for subsetting data frames.
-```{r subset.df2}
-df$x
-new.df <- subset(df, x >1); new.df
-```
 
 ## Data Frame Subsetting: II
 The `filter()` and `select()` functions in the `dplyr` package (in the tidyverse) can also be used for subsetting.
 ```{r subset.df3}
-df %>% select(x)
+df |>
+  select(x)
 filter(df, x > 1)
 ```
 
@@ -225,15 +230,17 @@ filter(df, x > 1)
 ## Exercise: Subsetting - Solutions1
 1. Create a new data frame that only includes houses worth more than $1,000,000.
 ```{r}
-expensive_houses <- subset(Seattle, price > 1000000)
-expensive_houses2 <- Seattle %>% filter(price > 1000000)
+expensive_houses2 <- Seattle |>
+  filter(price > 1000000)
 ```
 
 ## Exercise: Subsetting - Solutions2
 2. From this new data frame what is the average living square footage of houses. Hint columns in a data.frame can be indexed by `Seattle$sqft_living`
 ```{r}
 mean(expensive_houses$sqft_living)
-Seattle %>% filter(price > 1000000) %>% summarize(ave_size = mean(sqft_living))
+Seattle |>
+  filter(price > 1000000) |>
+  summarize(ave_size = mean(sqft_living))
 ```
 
 
@@ -273,7 +280,7 @@ Explore the indexing with these commands.
 ```{r, mysize=TRUE, size='\\tiny', eval=F}
 msu.info <- list( name = c('Waded Cruzado','Andy Hoegh'), 
          degree.from = c('University of Texas at Arlington','Virginia Tech'),
-         job.title = c('President', 'Assistant Professor of Statistics'))
+         job.title = c('President', 'Associate Professor of Statistics'))
 msu.info[1]
 msu.info[[1]]
 msu.info$name[2]
@@ -323,60 +330,3 @@ Create an array of dimension 2 x 2 x 3, where each of the three 2 x 2 subarray (
 array(c(1,0,0,1), dim = c(2,2,3))
 ```
 
-
-# Graphics
-
-## Basic Plotting in R: Scatterplot
-For now, let's consider some of the basic functionality in R.
-
-```{r plot,fig.align='center',fig.width=6, fig.height=4}
-plot(Seattle$price~Seattle$sqft_living)
-```
-
-## Basic Plotting in R: labels
-```{r plot2,fig.align='center',fig.width=6, fig.height=4,echo=T}
-plot(Seattle$price~Seattle$sqft_living, 
-     ylab='Price',xlab='Living Sqft')
-```
-
-## Basic Plotting in R: pch
-```{r plot3,fig.align='center',fig.width=6, fig.height=4}
-plot(Seattle$price~Seattle$sqft_living, 
-     ylab='Price',xlab='Living Sqft', pch=16)
-```
-
-## Basic Plotting in R: color
-```{r plot3b,fig.align='center',fig.width=6, fig.height=4}
-plot(Seattle$price~Seattle$sqft_living, pch=16,
-     col=rgb(0,0,.3,.3),ylab='Price',xlab='Living Sqft')
-```
-
-
-## Basic Plotting in R: title
-```{r plot4,fig.align='center',fig.width=6, fig.height=4}
-plot(Seattle$price~Seattle$sqft_living, pch=16, ylab='Price',
-     xlab='Living Sqft',main='Price vs. Living Sqft')
-```
-
-## Basic Plotting in R: histogram
-```{r plot5,fig.align='center',fig.align='center',fig.width=6, fig.height=4}
-hist(Seattle$price,xlab='Price', breaks='FD')
-```
-
-## Basic Plotting in R: histogram
-```{r plot6,fig.align='center',fig.width=6, fig.height=4}
-boxplot(Seattle$price~Seattle$bedrooms,ylab='Price', col='red',
-        xlab='bedrooms',main='Price by Bedrooms for Seattle')
-```
-
-## Exercise: Basic Plot
-
-- Using only the subset of homes worth more than a million dollars, create a graphic.
-
-## Solution: Basic Plot 
-
-```{r fig.align='center',fig.width=6, fig.height=4}
-boxplot(expensive_houses$price~expensive_houses$bedrooms,ylab='Price', col='red',
-        xlab='bedrooms',main='Price by Bedrooms for Seattle',
-        sub='For homes worth more than $1,000,000')
-```
